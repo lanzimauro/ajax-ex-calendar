@@ -9,22 +9,25 @@ $(document).ready(function () {
     var dataIniziale = moment('2018-01-01');
 
     var limiteIniziale = moment('2018-01-01');
-    var limiteFinale = moment('2018-12-31');
+    var limiteFinale = moment('2018-12-01');
 
 
 
     stampaGiorniMese(dataIniziale); // Inizializzazione Calendario
     stampaFestivi(dataIniziale);
-    var nomeGiorno = dataIniziale.isoWeekday();
-    console.log(nomeGiorno);
+
 
     $('.mese-succ').click(function () {
         $('.mese-prec').prop('disabled', false);
         dataIniziale.add(1, 'month');
         stampaGiorniMese(dataIniziale);
         stampaFestivi(dataIniziale);
-        var nomeGiorno = dataIniziale.isoWeekday();
-        console.log(nomeGiorno);
+        if (dataIniziale.isSameOrAfter(limiteFinale)) {
+            $('.mese-succ').prop('disabled', true);
+        }else {
+            $('.mese-succ').prop('disabled', false);
+        }
+
     });
 
     $('.mese-prec').click(function () {
@@ -69,7 +72,12 @@ $(document).ready(function () {
         var giorniMese = meseDaStampare.daysInMonth();
         var nomeMese = meseDaStampare.format('MMMM');
         $('#nome-mese').text(nomeMese); // Aggiorniamo il nome del mese in top calendar
-        
+        var nomeGiorno = dataIniziale.isoWeekday();
+        console.log(nomeGiorno);
+        for (var j = 1; j < nomeGiorno; j++) {
+            $('#calendar').append('<li class="vuoto"></li>')
+        }
+
         for (var i = 1; i <= giorniMese; i++) {
             // $('#calendar').append('<li>' + i + ' ' + nomeMese + '</li>');
             var giornoDaInserire = {
